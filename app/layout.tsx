@@ -5,8 +5,8 @@ import { ThemeProvider } from "@/lib/theme-context";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
-  title: "NCMS - Clinical Portal",
-  description: "Neuro Clinical Management System",
+  title: "Smartly Brain — Child Development & Rehabilitation Center",
+  description: "Integrated care management portal for Smartly Brain Child Development and Rehabilitation Center",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -94,27 +94,44 @@ export default function TokenQueue() {
     setLoading(false);
   };
 
-  // Fix 5: Only load doctors who have at least one active schedule slot
+  // Only load doctors with schedule today AND not on leave
   const fetchDoctorsWithSchedules = async () => {
-    const today = new Date().getDay(); // 0=Sun, 6=Sat
-    // Get doctor IDs that have a schedule for today
+    const todayDay = new Date().getDay();
+    const todayDate = format(new Date(), "yyyy-MM-dd");
+
+    // Get doctors with schedule today
     const { data: schedules } = await supabase
       .from("doctor_schedules")
       .select("doctor_id")
-      .eq("day_of_week", today)
+      .eq("day_of_week", todayDay)
       .eq("is_active", true);
 
     if (!schedules || schedules.length === 0) {
       setAvailableDoctors([]);
       return;
     }
-const doctorIds = Array.from(new Set(schedules.map((s: any) => s.doctor_id)));
+
+    // Get doctors on leave today
+    const { data: onLeave } = await supabase
+      .from("doctor_leaves")
+      .select("doctor_id")
+      .eq("leave_date", todayDate)
+      .eq("status", "approved");
+
+    const onLeaveIds = new Set((onLeave || []).map((l: any) => l.doctor_id));
+    const availableIds = [...new Set(schedules.map((s: any) => s.doctor_id))].filter((id) => !onLeaveIds.has(id));
+
+    if (availableIds.length === 0) {
+      setAvailableDoctors([]);
+      return;
+    }
+
     const { data: doctors } = await supabase
       .from("profiles")
       .select("*")
       .eq("role", "doctor")
       .eq("is_active", true)
-      .in("id", doctorIds)
+      .in("id", availableIds)
       .order("full_name");
 
     setAvailableDoctors(doctors || []);
@@ -265,7 +282,7 @@ const doctorIds = Array.from(new Set(schedules.map((s: any) => s.doctor_id)));
       {availableDoctors.length === 0 && (
         <div className="card p-4 flex items-center gap-3" style={{ borderColor: "rgba(245,158,11,0.25)", background: "rgba(245,158,11,0.05)" }}>
           <AlertCircle size={15} className="text-amber-400 flex-shrink-0" />
-          <p className="text-sm text-amber-400">No doctors have availability scheduled for today. Ask doctors to set their schedule first.</p>
+          <p className="text-sm text-amber-400">No doctors available today — either no schedules are set or all doctors are on leave.</p>
         </div>
       )}
 

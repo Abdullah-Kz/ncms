@@ -250,7 +250,7 @@ export default function TopBar() {
                   </div>
                   <div className="min-w-0">
                     <div className="text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>{profile?.full_name}</div>
-                    <div className="text-xs capitalize truncate" style={{ color: "var(--text-muted)" }}>{profile?.role} · {profile?.email}</div>
+                    <div className="text-xs capitalize truncate" style={{ color: "var(--text-muted)" }}>{profile?.role} · Smartly Brain</div>
                   </div>
                 </div>
               </div>
