@@ -108,7 +108,7 @@ export default function TokenQueue() {
       setAvailableDoctors([]);
       return;
     }
-
+const doctorIds = Array.from(new Set(schedules.map((s: any) => s.doctor_id)));
     const { data: doctors } = await supabase
       .from("profiles")
       .select("*")
