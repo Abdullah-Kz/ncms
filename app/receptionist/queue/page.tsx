@@ -109,7 +109,7 @@ export default function TokenQueue() {
       return;
     }
 
-    const doctorIds = [...new Set(schedules.map((s: any) => s.doctor_id))];
+    const doctorIds = Array.from(new Set(schedules.map((s: any) => s.doctor_id)));
     const { data: doctors } = await supabase
       .from("profiles")
       .select("*")
