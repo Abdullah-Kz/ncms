@@ -5,11 +5,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import {
   LayoutDashboard, UserPlus, Coins, Stethoscope, BarChart3,
-  Users, Settings, LogOut, Bell, Activity, ClipboardList,
-  Calendar, Shield, Layers, Building2,
+  Users, Settings, LogOut, Activity, ClipboardList,
+  Calendar, Layers, Building2, Menu, X,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import clsx from "clsx";
+import { useState } from "react";
 
 const NAV_ITEMS = {
   admin: [
@@ -23,17 +24,31 @@ const NAV_ITEMS = {
   ],
   receptionist: [
     { href: "/receptionist", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/receptionist/patients", label: "Register Patient", icon: UserPlus },
-    { href: "/receptionist/queue", label: "Token Queue", icon: Coins },
-    { href: "/receptionist/history", label: "Patient History", icon: ClipboardList },
+    { href: "/receptionist/patients", label: "Register", icon: UserPlus },
+    { href: "/receptionist/queue", label: "Queue", icon: Coins },
+    { href: "/receptionist/history", label: "History", icon: ClipboardList },
     { href: "/receptionist/appointments", label: "Appointments", icon: Calendar },
   ],
   doctor: [
     { href: "/doctor", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/doctor/sessions", label: "My Sessions", icon: Activity },
-    { href: "/doctor/patients", label: "My Patients", icon: Users },
+    { href: "/doctor/sessions", label: "Sessions", icon: Activity },
+    { href: "/doctor/patients", label: "Patients", icon: Users },
     { href: "/doctor/schedule", label: "Schedule", icon: Calendar },
   ],
+};
+
+const NAV_LABELS: Record<string, Record<string, string>> = {
+  admin: {
+    "/admin": "Dashboard", "/admin/doctors": "Doctors", "/admin/receptionists": "Receptionists",
+    "/admin/departments": "Departments", "/admin/services": "Services", "/admin/reports": "Reports", "/admin/settings": "Settings",
+  },
+  receptionist: {
+    "/receptionist": "Dashboard", "/receptionist/patients": "Register Patient", "/receptionist/queue": "Token Queue",
+    "/receptionist/history": "Patient History", "/receptionist/appointments": "Appointments",
+  },
+  doctor: {
+    "/doctor": "Dashboard", "/doctor/sessions": "My Sessions", "/doctor/patients": "My Patients", "/doctor/schedule": "Schedule",
+  },
 };
 
 const ROLE_COLORS: Record<string, string> = {
@@ -42,84 +57,150 @@ const ROLE_COLORS: Record<string, string> = {
   doctor: "#10b981",
 };
 
+function NavItem({ item, active, onClick }: { item: any; active: boolean; onClick?: () => void }) {
+  const Icon = item.icon;
+  return (
+    <Link
+      href={item.href}
+      onClick={onClick}
+      className={clsx("nav-link", active && "nav-link-active")}
+    >
+      <Icon size={16} />
+      <span>{item.label}</span>
+    </Link>
+  );
+}
+
 export default function Sidebar() {
   const { profile, signOut } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   if (!profile) return null;
 
-  const navItems = NAV_ITEMS[profile.role] || [];
+  const navItems = (NAV_ITEMS as any)[profile.role] || [];
   const roleColor = ROLE_COLORS[profile.role];
+
+  const isActive = (href: string) =>
+    pathname === href ||
+    (href !== "/admin" && href !== "/receptionist" && href !== "/doctor" && pathname.startsWith(href));
 
   const handleSignOut = async () => {
     await signOut();
-    toast.success("Signed out successfully");
+    toast.success("Signed out");
     router.push("/auth/login");
   };
 
-  return (
-    <aside
-      className="w-[220px] min-h-screen flex flex-col"
-      style={{
-        background: "var(--bg-secondary)",
-        borderRight: "1px solid var(--border)",
-      }}
-    >
+  // Mobile bottom nav — show only 4 most important items
+  const mobileNavItems = navItems.slice(0, 4);
+
+  const SidebarContent = ({ onItemClick }: { onItemClick?: () => void }) => (
+    <div className="flex flex-col h-full">
+      {/* Logo */}
       <div className="p-4 border-b border-white/[0.06]">
         <div className="flex items-center gap-2.5">
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center"
-            style={{ background: `${roleColor}15`, border: `1px solid ${roleColor}30` }}
-          >
-            <div className="w-3.5 h-3.5 rounded-full border-2" style={{ borderColor: roleColor }} />
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+            style={{ background: `${roleColor}15`, border: `1px solid ${roleColor}28` }}>
+            <div className="w-3 h-3 rounded-full border-2" style={{ borderColor: roleColor }} />
           </div>
           <div>
             <div className="font-semibold text-white text-sm tracking-tight">NCMS</div>
-            <div className="text-[10px] text-[#475569] uppercase tracking-widest">Clinical Portal</div>
+            <div className="text-[10px] uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>Clinical Portal</div>
           </div>
         </div>
       </div>
 
-      <nav className="flex-1 p-3 space-y-1">
-        {navItems.map((item) => {
+      {/* Nav */}
+      <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
+        {navItems.map((item: any) => (
+          <NavItem key={item.href} item={item} active={isActive(item.href)} onClick={onItemClick} />
+        ))}
+      </nav>
+
+      {/* User */}
+      <div className="p-3 border-t border-white/[0.06]">
+        <div className="flex items-center gap-2.5 px-3 py-2 mb-1">
+          <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0"
+            style={{ background: `${roleColor}20`, color: roleColor }}>
+            {profile.full_name.charAt(0).toUpperCase()}
+          </div>
+          <div className="overflow-hidden flex-1 min-w-0">
+            <div className="text-xs font-medium truncate" style={{ color: "var(--text-primary)" }}>{profile.full_name}</div>
+            <div className="text-[10px] capitalize" style={{ color: "var(--text-muted)" }}>{profile.role}</div>
+          </div>
+        </div>
+        <button onClick={handleSignOut}
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-left"
+          style={{ color: "var(--text-secondary)" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#f87171"; (e.currentTarget as HTMLElement).style.background = "rgba(239,68,68,0.08)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)"; (e.currentTarget as HTMLElement).style.background = ""; }}
+        >
+          <LogOut size={15} />
+          Sign Out
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <aside className="desktop-sidebar w-[220px] min-h-screen flex-shrink-0 hidden md:flex flex-col"
+        style={{ background: "var(--bg-secondary)", borderRight: "1px solid var(--border)" }}>
+        <SidebarContent />
+      </aside>
+
+      {/* Mobile Top Bar (hamburger) */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 h-14 flex items-center justify-between px-4"
+        style={{ background: "var(--bg-secondary)", borderBottom: "1px solid var(--border)" }}>
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center"
+            style={{ background: `${roleColor}15`, border: `1px solid ${roleColor}28` }}>
+            <div className="w-3 h-3 rounded-full border-2" style={{ borderColor: roleColor }} />
+          </div>
+          <span className="font-semibold text-white text-sm">NCMS</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="text-xs" style={{ color: "var(--text-muted)" }}>{profile.full_name.split(" ")[0]}</div>
+          <button onClick={() => setMobileOpen(true)} className="p-2 rounded-lg" style={{ background: "rgba(255,255,255,0.05)" }}>
+            <Menu size={18} style={{ color: "var(--text-secondary)" }} />
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Drawer */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+          <div className="relative w-64 flex flex-col h-full animate-slide-right"
+            style={{ background: "var(--bg-secondary)", borderRight: "1px solid var(--border)" }}>
+            <div className="absolute top-3 right-3">
+              <button onClick={() => setMobileOpen(false)} className="p-1.5 rounded-lg hover:bg-white/[0.06]">
+                <X size={16} style={{ color: "var(--text-secondary)" }} />
+              </button>
+            </div>
+            <SidebarContent onItemClick={() => setMobileOpen(false)} />
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Bottom Nav */}
+      <nav className="mobile-nav md:hidden fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around h-16 px-2"
+        style={{ background: "var(--bg-secondary)", borderTop: "1px solid var(--border)" }}>
+        {mobileNavItems.map((item: any) => {
           const Icon = item.icon;
-          const active = pathname === item.href || (item.href !== "/admin" && item.href !== "/receptionist" && item.href !== "/doctor" && pathname.startsWith(item.href));
+          const active = isActive(item.href);
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={clsx("nav-link", active && "nav-link-active")}
-            >
-              <Icon size={16} />
-              {item.label}
+            <Link key={item.href} href={item.href}
+              className="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all min-w-0"
+              style={{ color: active ? roleColor : "var(--text-muted)" }}>
+              <Icon size={20} />
+              <span className="text-[10px] font-medium truncate">{item.label}</span>
             </Link>
           );
         })}
       </nav>
-
-      <div className="p-3 border-t border-white/[0.06] space-y-2">
-        <div className="flex items-center gap-3 px-3 py-2 rounded-lg">
-          <div
-            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0"
-            style={{ background: `${roleColor}20`, color: roleColor }}
-          >
-            {profile.full_name.charAt(0).toUpperCase()}
-          </div>
-          <div className="overflow-hidden">
-            <div className="text-xs font-medium text-[#f1f5f9] truncate">{profile.full_name}</div>
-            <div className="text-[10px] text-[#475569] capitalize">{profile.role}</div>
-          </div>
-        </div>
-
-        <button
-          onClick={handleSignOut}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-[#94a3b8] hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
-        >
-          <LogOut size={16} />
-          Sign Out
-        </button>
-      </div>
-    </aside>
+    </>
   );
 }
