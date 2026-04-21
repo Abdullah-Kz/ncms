@@ -119,7 +119,7 @@ export default function TokenQueue() {
       .eq("status", "approved");
 
     const onLeaveIds = new Set((onLeave || []).map((l: any) => l.doctor_id));
-    const availableIds = [...new Set(schedules.map((s: any) => s.doctor_id))].filter((id) => !onLeaveIds.has(id));
+    const availableIds = Array.from(new Set(schedules.map((s: any) => s.doctor_id))).filter((id) => !onLeaveIds.has(id));
 
     if (availableIds.length === 0) {
       setAvailableDoctors([]);
