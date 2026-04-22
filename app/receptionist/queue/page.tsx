@@ -56,13 +56,17 @@ export default function TokenQueue() {
   const [issuing, setIssuing] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    fetchTokens();
-    fetchDoctorsWithSchedules();
-    fetchServices();
-    const interval = setInterval(fetchTokens, 25000);
-    return () => clearInterval(interval);
-  }, []);
+ useEffect(() => {
+  fetchTokens();
+  fetchDoctorsWithSchedules();
+  fetchServices();
+
+  const interval = setInterval(() => {
+    if (!document.hidden) fetchTokens();
+  }, 30000);
+
+  return () => clearInterval(interval);
+}, []);
 
   useEffect(() => {
     if (preselectedPatientId) {
