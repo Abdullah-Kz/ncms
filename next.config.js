@@ -1,11 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false, // Prevents double-mounting in dev (causes double DB calls)
+  reactStrictMode: false,
+  output: "standalone",
   experimental: {
-    optimizePackageImports: ["lucide-react", "recharts", "date-fns"],
+    optimizePackageImports: [
+      "lucide-react",
+      "recharts",
+      "date-fns",
+      "@supabase/supabase-js",
+    ],
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
 };
+
 module.exports = nextConfig;
