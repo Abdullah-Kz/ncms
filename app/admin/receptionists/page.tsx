@@ -66,7 +66,7 @@ export default function AdminReceptionists() {
       <div className="card overflow-hidden">
         <table className="w-full">
           <thead>
-            <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+            <tr style={{ borderBottom: "1px solid var(--border)" }}>
               <th className="table-head">Staff Member</th>
               <th className="table-head">Phone</th>
               <th className="table-head">Status</th>
@@ -76,32 +76,41 @@ export default function AdminReceptionists() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={5} className="text-center py-12 text-[#475569] text-sm">Loading...</td></tr>
+              <tr><td colSpan={5} className="text-center py-12 text-sm" style={{ color: "var(--text-muted)" }}>Loading...</td></tr>
             ) : staff.length === 0 ? (
-              <tr><td colSpan={5} className="text-center py-12 text-[#475569] text-sm">No receptionists found</td></tr>
+              <tr><td colSpan={5} className="text-center py-12 text-sm" style={{ color: "var(--text-muted)" }}>No receptionists found</td></tr>
             ) : staff.map((p) => (
               <tr key={p.id} className="table-row">
                 <td className="table-cell">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#4a9eff]/10 flex items-center justify-center text-xs font-semibold text-[#4a9eff]">{p.full_name.charAt(0)}</div>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold"
+                      style={{ background: "var(--nav-active-bg)", color: "var(--accent-blue)" }}>{p.full_name.charAt(0)}</div>
                     <div>
-                      <div className="text-sm font-medium text-white">{p.full_name}</div>
-                      <div className="text-xs text-[#475569]">{p.email}</div>
+                      <div className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>{p.full_name}</div>
+                      <div className="text-xs" style={{ color: "var(--text-muted)" }}>{p.email}</div>
                     </div>
                   </div>
                 </td>
-                <td className="table-cell text-[#94a3b8]">{p.phone || "—"}</td>
+                <td className="table-cell" style={{ color: "var(--text-secondary)" }}>{p.phone || "—"}</td>
                 <td className="table-cell">
                   <span className={p.is_active ? "badge-session" : "badge-completed"}>
-                    <span className="w-1.5 h-1.5 rounded-full" style={{ background: p.is_active ? "#10b981" : "#64748b" }} />
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ background: p.is_active ? "var(--accent-green)" : "var(--text-muted)" }} />
                     {p.is_active ? "Active" : "Inactive"}
                   </span>
                 </td>
-                <td className="table-cell text-[#475569] text-xs">{format(new Date(p.created_at), "MMM d, yyyy")}</td>
+                <td className="table-cell text-xs" style={{ color: "var(--text-muted)" }}>{format(new Date(p.created_at), "MMM d, yyyy")}</td>
                 <td className="table-cell">
                   <div className="flex items-center gap-2">
-                    <button onClick={() => openEdit(p)} className="p-1.5 rounded hover:bg-white/[0.06] text-[#94a3b8] hover:text-white transition-colors"><Edit2 size={13} /></button>
-                    <button onClick={() => toggleActive(p)} className="p-1.5 rounded hover:bg-red-500/10 text-[#94a3b8] hover:text-red-400 transition-colors">
+                    <button onClick={() => openEdit(p)} className="p-1.5 rounded-lg transition-colors"
+                      style={{ color: "var(--text-muted)" }}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--bg-input)"; (e.currentTarget as HTMLElement).style.color = "var(--text-primary)"; }}
+                      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--text-muted)"; }}>
+                      <Edit2 size={13} />
+                    </button>
+                    <button onClick={() => toggleActive(p)} className="p-1.5 rounded-lg transition-colors"
+                      style={{ color: "var(--text-muted)" }}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(192,80,58,0.08)"; (e.currentTarget as HTMLElement).style.color = "var(--accent-red)"; }}
+                      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--text-muted)"; }}>
                       {p.is_active ? <UserX size={13} /> : <UserCheck size={13} />}
                     </button>
                   </div>
@@ -116,8 +125,8 @@ export default function AdminReceptionists() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="card w-full max-w-md p-6 animate-slide-up">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-base font-semibold text-white">{editItem ? "Edit Receptionist" : "Add Receptionist"}</h3>
-              <button onClick={() => setShowModal(false)}><X size={16} className="text-[#94a3b8]" /></button>
+              <h3 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>{editItem ? "Edit Receptionist" : "Add Receptionist"}</h3>
+              <button onClick={() => setShowModal(false)}><X size={16} style={{ color: "var(--text-muted)" }} /></button>
             </div>
             <div className="space-y-4">
               <div><label className="label">Full Name *</label><input className="input" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} placeholder="Jane Doe" /></div>

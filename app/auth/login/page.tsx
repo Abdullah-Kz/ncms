@@ -71,32 +71,17 @@ export default function LoginPage() {
         </div>
 
         {/* Center content */}
-        <div className="relative space-y-6">
-          <div>
-            <h1 className="text-3xl font-bold leading-tight" style={{ color: "var(--text-primary)" }}>
-              Every child
-              <br />
-              <span style={{ color: "var(--accent-blue)" }}>deserves</span> to
-              <br />
-              thrive.
-            </h1>
-            <p className="text-sm mt-3 leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-              Integrated care management for child development and rehabilitation specialists.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { label: "Children Served", value: "2,400+" },
-              { label: "Specialist Doctors", value: "18" },
-              { label: "Avg Wait Time", value: "8 min" },
-              { label: "Sessions/Month", value: "640+" },
-            ].map((s) => (
-              <div key={s.label} className="card p-3">
-                <div className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{s.value}</div>
-                <div className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
+        <div className="relative space-y-4">
+          <h1 className="text-3xl font-bold leading-tight" style={{ color: "var(--text-primary)" }}>
+            Every child
+            <br />
+            <span style={{ color: "var(--accent-blue)" }}>deserves</span> to
+            <br />
+            thrive.
+          </h1>
+          <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+            Integrated care management for child development and rehabilitation specialists.
+          </p>
         </div>
 
         {/* Footer */}

@@ -132,37 +132,38 @@ export default function AdminDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="card p-5 lg:col-span-2">
-          <h2 className="text-sm font-semibold text-white mb-1">Session Trends</h2>
-          <p className="text-xs text-[#475569] mb-4">Last 7 days</p>
+          <h2 className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>Session Trends</h2>
+          <p className="text-xs mb-4" style={{ color: "var(--text-muted)" }}>Last 7 days</p>
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={sessionData} barSize={24}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-              <XAxis dataKey="day" tick={{ fill: "#475569", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: "#475569", fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+              <XAxis dataKey="day" tick={{ fill: "var(--text-muted)", fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: "var(--text-muted)", fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="sessions" fill="#4a9eff" radius={[4, 4, 0, 0]} fillOpacity={0.8} />
+              <Bar dataKey="sessions" fill="var(--accent-blue)" radius={[4, 4, 0, 0]} fillOpacity={0.85} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         <div className="card p-5">
-          <h2 className="text-sm font-semibold text-white mb-4">Top Doctors</h2>
+          <h2 className="text-sm font-semibold mb-4" style={{ color: "var(--text-primary)" }}>Top Doctors</h2>
           {topDoctors.length === 0 ? (
-            <p className="text-xs text-[#475569] text-center py-8">No completed sessions yet</p>
+            <p className="text-xs text-center py-8" style={{ color: "var(--text-muted)" }}>No completed sessions yet</p>
           ) : (
             <div className="space-y-3">
               {topDoctors.map((doc, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-[#4a9eff]/10 flex items-center justify-center text-[10px] font-semibold text-[#4a9eff] flex-shrink-0">
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-semibold flex-shrink-0"
+                    style={{ background: "var(--nav-active-bg)", color: "var(--accent-blue)" }}>
                     {i + 1}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-medium text-white truncate">{doc.name}</div>
-                    <div className="mt-1 h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
-                      <div className="h-full bg-[#4a9eff] rounded-full" style={{ width: `${(doc.sessions / (topDoctors[0]?.sessions || 1)) * 100}%` }} />
+                    <div className="text-xs font-semibold truncate" style={{ color: "var(--text-primary)" }}>{doc.name}</div>
+                    <div className="mt-1 h-1.5 rounded-full overflow-hidden" style={{ background: "var(--bg-input)" }}>
+                      <div className="h-full rounded-full" style={{ width: `${(doc.sessions / (topDoctors[0]?.sessions || 1)) * 100}%`, background: "var(--accent-blue)" }} />
                     </div>
                   </div>
-                  <div className="text-xs text-[#94a3b8]">{doc.sessions}</div>
+                  <div className="text-xs" style={{ color: "var(--text-secondary)" }}>{doc.sessions}</div>
                 </div>
               ))}
             </div>
@@ -173,22 +174,23 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="card p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-white">Recent Registrations</h2>
-            <Link href="/admin/reports" className="text-xs text-[#4a9eff] hover:underline">View all</Link>
+            <h2 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Recent Registrations</h2>
+            <Link href="/admin/reports" className="text-xs hover:underline" style={{ color: "var(--accent-blue)" }}>View all</Link>
           </div>
           {recentPatients.length === 0 ? (
-            <p className="text-xs text-[#475569] text-center py-8">No patients registered yet</p>
+            <p className="text-xs text-center py-8" style={{ color: "var(--text-muted)" }}>No patients registered yet</p>
           ) : (
             <div className="space-y-1">
               {recentPatients.map((p) => (
-                <div key={p.id} className="flex items-center justify-between py-2 border-b border-white/[0.04] last:border-0">
+                <div key={p.id} className="flex items-center justify-between py-2 last:border-0" style={{ borderBottom: "1px solid var(--border)" }}>
                   <div className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-full bg-[#f59e0b]/10 flex items-center justify-center text-xs font-semibold text-[#f59e0b]">
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold"
+                      style={{ background: "rgba(201,146,42,0.12)", color: "var(--accent-gold)" }}>
                       {p.full_name.charAt(0)}
                     </div>
-                    <span className="text-sm text-white">{p.full_name}</span>
+                    <span className="text-sm" style={{ color: "var(--text-primary)" }}>{p.full_name}</span>
                   </div>
-                  <span className="text-xs text-[#475569]">{format(new Date(p.created_at), "MMM d")}</span>
+                  <span className="text-xs" style={{ color: "var(--text-muted)" }}>{format(new Date(p.created_at), "MMM d")}</span>
                 </div>
               ))}
             </div>
@@ -196,7 +198,7 @@ export default function AdminDashboard() {
         </div>
 
         <div className="card p-5">
-          <h2 className="text-sm font-semibold text-white mb-4">Quick Actions</h2>
+          <h2 className="text-sm font-semibold mb-4" style={{ color: "var(--text-primary)" }}>Quick Actions</h2>
           <div className="grid grid-cols-2 gap-3">
             {[
               { label: "Add Doctor", href: "/admin/doctors", icon: Stethoscope, color: "#10b981" },

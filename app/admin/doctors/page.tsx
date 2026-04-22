@@ -142,17 +142,18 @@ export default function AdminDoctors() {
       )}
 
       <div className="card p-4 flex items-center gap-3">
-        <Search size={14} className="text-[#475569]" />
+        <Search size={14} style={{ color: "var(--text-muted)" }} />
         <input
           type="text"
           placeholder="Search by name, email or department..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 bg-transparent text-sm text-[#f1f5f9] placeholder-[#475569] focus:outline-none"
+          className="flex-1 bg-transparent text-sm focus:outline-none"
+          style={{ color: "var(--text-primary)" }}
         />
         {search && (
           <button onClick={() => setSearch("")}>
-            <X size={14} className="text-[#475569]" />
+            <X size={14} style={{ color: "var(--text-muted)" }} />
           </button>
         )}
       </div>
@@ -171,49 +172,55 @@ export default function AdminDoctors() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={6} className="text-center py-12 text-[#475569] text-sm">Loading...</td></tr>
+              <tr><td colSpan={6} className="text-center py-12 text-sm" style={{ color: "var(--text-muted)" }}>Loading...</td></tr>
             ) : filtered.length === 0 ? (
-              <tr><td colSpan={6} className="text-center py-12 text-[#475569] text-sm">No doctors found</td></tr>
+              <tr><td colSpan={6} className="text-center py-12 text-sm" style={{ color: "var(--text-muted)" }}>No doctors found</td></tr>
             ) : (
               filtered.map((doc) => (
                 <tr key={doc.id} className="table-row">
                   <td className="table-cell">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[#10b981]/10 flex items-center justify-center text-xs font-semibold text-[#10b981]">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold"
+                        style={{ background: "rgba(90,154,111,0.12)", color: "var(--accent-green)" }}>
                         {doc.full_name.charAt(0)}
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-white">{doc.full_name}</div>
-                        <div className="text-xs text-[#475569]">{doc.email}</div>
+                        <div className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>{doc.full_name}</div>
+                        <div className="text-xs" style={{ color: "var(--text-muted)" }}>{doc.email}</div>
                       </div>
                     </div>
                   </td>
                   <td className="table-cell">
                     {doc.specialization ? (
-                      <span className="text-xs px-2.5 py-1 rounded-full bg-[#4a9eff]/10 text-[#4a9eff] border border-[#4a9eff]/20">
+                      <span className="text-xs px-2.5 py-1 rounded-full font-medium"
+                        style={{ background: "var(--nav-active-bg)", color: "var(--accent-blue)", border: "1px solid var(--nav-active-border)" }}>
                         {doc.specialization}
                       </span>
                     ) : (
-                      <span className="text-[#475569]">—</span>
+                      <span style={{ color: "var(--text-muted)" }}>—</span>
                     )}
                   </td>
-                  <td className="table-cell text-[#94a3b8]">{doc.phone || "—"}</td>
+                  <td className="table-cell" style={{ color: "var(--text-secondary)" }}>{doc.phone || "—"}</td>
                   <td className="table-cell">
                     <span className={doc.is_active ? "badge-session" : "badge-completed"}>
-                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: doc.is_active ? "#10b981" : "#64748b" }} />
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: doc.is_active ? "var(--accent-green)" : "var(--text-muted)" }} />
                       {doc.is_active ? "Active" : "Inactive"}
                     </span>
                   </td>
-                  <td className="table-cell text-[#475569] text-xs">{format(new Date(doc.created_at), "MMM d, yyyy")}</td>
+                  <td className="table-cell text-xs" style={{ color: "var(--text-muted)" }}>{format(new Date(doc.created_at), "MMM d, yyyy")}</td>
                   <td className="table-cell">
                     <div className="flex items-center gap-2">
-                      <button onClick={() => openEdit(doc)} className="p-1.5 rounded hover:bg-white/[0.06] text-[#94a3b8] hover:text-white transition-colors">
+                      <button onClick={() => openEdit(doc)} className="p-1.5 rounded-lg transition-colors"
+                        style={{ color: "var(--text-muted)" }}
+                        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--bg-input)"; (e.currentTarget as HTMLElement).style.color = "var(--text-primary)"; }}
+                        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--text-muted)"; }}>
                         <Edit2 size={13} />
                       </button>
-                      <button
-                        onClick={() => toggleActive(doc)}
-                        className={`p-1.5 rounded transition-colors ${doc.is_active ? "hover:bg-red-500/10 text-[#94a3b8] hover:text-red-400" : "hover:bg-emerald-500/10 text-[#94a3b8] hover:text-emerald-400"}`}
-                      >
+                      <button onClick={() => toggleActive(doc)}
+                        className="p-1.5 rounded-lg transition-colors"
+                        style={{ color: "var(--text-muted)" }}
+                        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = doc.is_active ? "rgba(192,80,58,0.08)" : "rgba(90,154,111,0.08)"; (e.currentTarget as HTMLElement).style.color = doc.is_active ? "var(--accent-red)" : "var(--accent-green)"; }}
+                        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--text-muted)"; }}>
                         {doc.is_active ? <UserX size={13} /> : <UserCheck size={13} />}
                       </button>
                     </div>
@@ -229,11 +236,11 @@ export default function AdminDoctors() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="card w-full max-w-md p-6 animate-slide-up">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-base font-semibold text-white">
+              <h3 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
                 {editDoc ? "Edit Doctor" : "Add New Doctor"}
               </h3>
               <button onClick={() => setShowModal(false)}>
-                <X size={16} className="text-[#94a3b8]" />
+                <X size={16} style={{ color: "var(--text-muted)" }} />
               </button>
             </div>
             <div className="space-y-4">
