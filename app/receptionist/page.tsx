@@ -22,10 +22,12 @@ export default function ReceptionistDashboard() {
   const [stats, setStats] = useState({ total: 0, waiting: 0, inSession: 0, completed: 0 });
 
   useEffect(() => {
-    fetchTodayTokens();
-    const interval = setInterval(fetchTodayTokens, 30000);
-    return () => clearInterval(interval);
-  }, []);
+  fetchTodayTokens();
+  const interval = setInterval(() => {
+    if (!document.hidden) fetchTodayTokens();
+  }, 30000);
+  return () => clearInterval(interval);
+}, []);
 
   const fetchTodayTokens = async () => {
     const today = format(new Date(), "yyyy-MM-dd");
