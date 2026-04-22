@@ -112,13 +112,6 @@ export default function DoctorSessions() {
   const [loading, setLoading] = useState(true);
   const [showNotesPanel, setShowNotesPanel] = useState(false);
 
-  useEffect(() => {
-    if (!profile) return;
-    fetchQueue();
-    fetchActiveSession();
-    fetchOtherDoctors();
-    fetchPastSessions();
-  }, [profile]);
 
   useEffect(() => {
     if (activeSession?.started_at) {
