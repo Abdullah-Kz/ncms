@@ -294,6 +294,69 @@ select option {
 [data-theme="dark"] .card { box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
 
 /* ============================================================
+   LIGHT THEME — Override hardcoded dark-only Tailwind classes
+   These classes appear throughout pages as text-white, text-[#94a3b8] etc.
+   In light mode we remap them to legible warm colors.
+   ============================================================ */
+
+/* text-white → primary text in light */
+[data-theme="light"] .text-white { color: var(--text-primary) !important; }
+
+/* text-[#f1f5f9] (near-white) → primary text */
+[data-theme="light"] .text-\[\#f1f5f9\] { color: var(--text-primary) !important; }
+
+/* text-[#94a3b8] (muted blue-gray) → secondary text */
+[data-theme="light"] .text-\[\#94a3b8\] { color: var(--text-secondary) !important; }
+
+/* text-[#475569] (slate) → muted text */
+[data-theme="light"] .text-\[\#475569\] { color: var(--text-muted) !important; }
+
+/* text-[#4a9eff] accent blue → theme accent */
+[data-theme="light"] .text-\[\#4a9eff\] { color: var(--accent-blue) !important; }
+
+/* text-[#10b981] green → theme green */
+[data-theme="light"] .text-\[\#10b981\] { color: var(--accent-green) !important; }
+
+/* text-[#f59e0b] gold → theme gold */
+[data-theme="light"] .text-\[\#f59e0b\] { color: var(--accent-gold) !important; }
+
+/* text-[#a78bfa] purple */
+[data-theme="light"] .text-\[\#a78bfa\] { color: var(--accent-purple) !important; }
+
+/* Search input text in light mode */
+[data-theme="light"] input.bg-transparent { color: var(--text-primary) !important; }
+[data-theme="light"] input::placeholder { color: var(--text-muted) !important; }
+
+/* White backgrounds used as card overlays → light card bg */
+[data-theme="light"] .bg-white\/\[0\.03\],
+[data-theme="light"] .bg-white\/\[0\.04\],
+[data-theme="light"] .bg-white\/\[0\.05\],
+[data-theme="light"] .bg-white\/\[0\.06\],
+[data-theme="light"] .bg-white\/\[0\.08\] {
+  background: rgba(139,115,85,0.06) !important;
+}
+
+/* Borders using white/opacity */
+[data-theme="light"] .border-white\/\[0\.04\],
+[data-theme="light"] .border-white\/\[0\.06\],
+[data-theme="light"] .border-white\/\[0\.08\] {
+  border-color: var(--border) !important;
+}
+
+/* Hover states that go white-ish */
+[data-theme="light"] .hover\:bg-white\/\[0\.05\]:hover,
+[data-theme="light"] .hover\:bg-white\/\[0\.06\]:hover { background: rgba(139,115,85,0.08) !important; }
+[data-theme="light"] .hover\:text-white:hover { color: var(--text-primary) !important; }
+
+/* Table border override */
+[data-theme="light"] tr[style*="rgba(255,255,255"] { border-color: var(--border) !important; }
+
+/* Mono token text */
+[data-theme="light"] .font-mono { color: var(--accent-blue) !important; }
+[data-theme="light"] td .font-mono,
+[data-theme="light"] span.font-mono { color: var(--accent-blue) !important; }
+
+/* ============================================================
    ANIMATIONS
    ============================================================ */
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
