@@ -62,7 +62,7 @@ const Logo = ({ roleColor }: { roleColor: string }) => (
     </div>
     <div className="min-w-0">
       <div className="font-bold text-sm leading-tight" style={{ color: "var(--text-primary)" }}>
-        Smartly Brain
+        Smartify Brain
       </div>
       <div className="text-[9px] leading-tight mt-0.5" style={{ color: "var(--text-muted)" }}>
         Child Development & Rehab
