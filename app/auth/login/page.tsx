@@ -65,7 +65,7 @@ export default function LoginPage() {
             <Brain size={22} style={{ color: "var(--accent-blue)" }} />
           </div>
           <div>
-            <div className="font-bold text-base leading-tight" style={{ color: "var(--text-primary)" }}>Smartly Brain</div>
+            <div className="font-bold text-base leading-tight" style={{ color: "var(--text-primary)" }}>Smartify Brain</div>
             <div className="text-[10px] leading-snug mt-0.5" style={{ color: "var(--text-muted)" }}>Child Development & Rehabilitation Center</div>
           </div>
         </div>
@@ -86,7 +86,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <div className="relative text-xs" style={{ color: "var(--text-muted)" }}>
-          © {new Date().getFullYear()} Smartly Brain · Child Development & Rehabilitation Center
+          © {new Date().getFullYear()} Smartify Brain · Child Development & Rehabilitation Center
         </div>
       </div>
 
@@ -99,7 +99,7 @@ export default function LoginPage() {
             <Brain size={20} style={{ color: "var(--accent-blue)" }} />
           </div>
           <div>
-            <div className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>Smartly Brain</div>
+            <div className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>Smartify Brain</div>
             <div className="text-[10px]" style={{ color: "var(--text-muted)" }}>Child Development & Rehab Center</div>
           </div>
         </div>
@@ -170,7 +170,7 @@ export default function LoginPage() {
           </div>
 
           <p className="text-center text-xs mt-4" style={{ color: "var(--text-muted)" }}>
-            Access restricted to authorized Smartly Brain staff only
+            Access restricted to authorized Smartify Brain staff only
           </p>
         </div>
       </div>
